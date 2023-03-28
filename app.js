@@ -18,7 +18,7 @@ require('dotenv').config();
 
 app.set('view engine', 'ejs');
 
-mongoose.connect(process.env.mongo_connect_url);
+mongoose.connect(${process.env.mongo_connect_url});
 
 var items = [];
 
