@@ -1,14 +1,28 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 
+const jsdom = require("jsdom");
+const { JSDOM } = jsdom;
+
+const mongoose  = require("mongoose");
+
 const app = express();
+
+
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static("public"));
 
+require('dotenv').config();
+
 app.set('view engine', 'ejs');
 
+mongoose.connect(process.env.mongo_connect_url);
 
-var items=[];
+var items = [];
+
+var ToDoList = mongoose.model("ToDoList", {
+  name: String
+});
 
 app.get("/", function(req, res){
   var today = new Date();
@@ -66,13 +80,32 @@ app.get("/", function(req, res){
 
   // day += "day";
 
-  res.render('list', {kindofDay: day, newListItems: items});
+  // const dom = new JSDOM('list');
+  //
+  // console.log(dom.window.document.querySelectorAll("#item_in_database#item_check").checked);
+
+  // list_present.forEach((element)=>{
+  //   console.log(element.item_check);
+  // });
+
+  ToDoList.find().then((result)=>{
+    res.render('list', {kindofDay: day, newListItems: result});
+  }).catch((err) => console.log(err));
+
 });
 
-app.post("/" , (req, res) => {
-  var item = req.body.newItem;
+app.post("/delete", (req, res) => {
+  const toDelete = req.body.checkbox;
 
-  items.push(item);
+  ToDoList.deleteOne({"_id" : toDelete}).catch((err)=>console.log(err));
+  res.redirect("/");
+})
+
+app.post("/" , (req, res) => {
+  var item_to_be_added = req.body.newItem;
+
+  const item = new ToDoList({name: item_to_be_added});
+  item.save();
 
   res.redirect("/");
 })
