@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>To Do List</title>
+
+    <link rel="stylesheet" href="css/styles.css">
+  </head>
+  <body>
+
+  <!-- <%if(kindofDay == "sunday" || kindofDay=="sunday"){%>
+      <h1 style="color: purple">  <%=kindofDay%> ToDo List</h1>
+  <%}else{%>
+      <h1 style="color:blue">  <%=kindofDay%> ToDo List</h1>
+  <%}%> -->
+
+  <div class="box" id="heading">
+    <h1> <%= kindofDay %> </h1>
+  </div>
+
+
+  <div class="box">
+<%  newListItems.forEach((element)=> { %>
+      <form action="/delete" method="post">
+        <div class="item">
+          <input type="checkbox" value= "<%= element.id %>" name="checkbox" onchange="this.form.submit()">
+          <p><%= element.name %></p>
+        </div>
+      </form>
+<% }) %>
+
+    <form class="item" action="/" method="post">
+      <input type="text" name="newItem" placeholder="New Item" autofocus autocomplete="off">
+      <button type="submit" name="button">+</button>
+    </form>
+
+
+  </div>
+
+  </body>
+</html>
