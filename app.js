@@ -18,23 +18,23 @@ require('dotenv').config();
 
 app.set('view engine', 'ejs');
 
-const uri = process.env.mongo_connect_url;
+// const uri = process.env.mongo_connect_url;
 
-const client = new MongoClient(uri);
-client.connect(err => {
-    if(err){ console.error(err); return false;}
-    // connection to mongo is successful, listen for requests
-    app.listen(PORT, () => {
-        console.log("listening for requests");
-    })
-});
+// const client = new MongoClient(uri);
+// client.connect(err => {
+//     if(err){ console.error(err); return false;}
+//     // connection to mongo is successful, listen for requests
+//     app.listen(PORT, () => {
+//         console.log("listening for requests");
+//     })
+// });
 
 
-// mongoose.connect(${process.env.mongo_connect_url}).then(() => {
-//   app.listen(PORT, function(){
-//     console.log("Server is Started Successfully");
-//   });
-// }).catch((err)=>{});
+mongoose.connect(process.env.mongo_connect_url).then(() => {
+  app.listen(PORT, function(){
+    console.log("Server is Started Successfully");
+  })
+}).catch((err)=> console.log(err));
 
 var items = [];
 
